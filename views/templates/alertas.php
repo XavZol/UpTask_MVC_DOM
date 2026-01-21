@@ -1,0 +1,13 @@
+<!-- En views/templates/alertas.php -->
+<?php
+// Esto evita el error si $alertas no existe o está vacía
+if (!empty($alertas)):
+    foreach ($alertas as $key => $mensajes):
+        foreach ($mensajes as $mensaje):
+            ?>
+            <div class="alerta <?php echo $key; ?>"><?php echo $mensaje; ?></div>
+        <?php
+        endforeach;
+    endforeach;
+endif;
+?>
