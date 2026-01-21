@@ -32,3 +32,6 @@ export function dev() {
 }
 
 export default series( js, css, dev )
+export const build = series(js, css);
+
+// gulp
