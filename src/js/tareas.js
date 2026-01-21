@@ -6,21 +6,21 @@
 
     // Boton para mostrar el modal de mostrar nueva tarea
     const nuevaTareaBtn = document.querySelector('#agregar-tarea');
-    nuevaTareaBtn.addEventListener('click', function() {
+    nuevaTareaBtn.addEventListener('click', function () {
         mostrarFormulario();
     });
 
     // Obtener filtros de Búsqueda
 
     const filtros = document.querySelectorAll('#filtros input[type="radio"]');
-    filtros.forEach( radio => {
+    filtros.forEach(radio => {
         radio.addEventListener('input', filtrarTareas);
     });
 
     function filtrarTareas(e) {
         const filtro = e.target.value;
 
-        if(filtro !== '') {
+        if (filtro !== '') {
             filtradas = tareas.filter(tarea => tarea.estado === filtro);
         } else {
             filtradas = [];
@@ -75,8 +75,8 @@
 
             const nombreTarea = document.createElement('P');
             nombreTarea.textContent = tarea.nombre;
-            nombreTarea.ondblclick = function() {
-                mostrarFormulario(editar = true, {...tarea});
+            nombreTarea.ondblclick = function () {
+                mostrarFormulario(editar = true, { ...tarea });
             }
 
             const opcionesDiv = document.createElement('DIV');
@@ -112,9 +112,9 @@
     }
 
     function totalPendientes() {
-        const totalPendientes = tareas.filter( tarea => tarea.estado === "0");
+        const totalPendientes = tareas.filter(tarea => tarea.estado === "0");
         const pendientesRadio = document.querySelector('#pendientes');
-        if(totalPendientes.length === 0) {
+        if (totalPendientes.length === 0) {
             pendientesRadio.disabled = true;
         } else {
             pendientesRadio.disabled = false;
@@ -122,9 +122,9 @@
     }
 
     function totalCompletas() {
-        const totalCompletas = tareas.filter( tarea => tarea.estado === "1");
+        const totalCompletas = tareas.filter(tarea => tarea.estado === "1");
         const completasRadio = document.querySelector('#completadas');
-        if(totalCompletas.length === 0) {
+        if (totalCompletas.length === 0) {
             completasRadio.disabled = true;
         } else {
             completasRadio.disabled = false;
@@ -178,20 +178,20 @@
                 }, 500);
             }
             if (e.target.classList.contains('submit-nueva-tarea')) {
-        const nombreTarea = document.querySelector('#tarea').value.trim();
+                const nombreTarea = document.querySelector('#tarea').value.trim();
 
-        if (nombreTarea === '') {
-            // Mostrar alerta de error
-            mostrarAlerta('El Nombre de la Tarea es Obligatorio', 'error', document.querySelector('.formulario legend'));
-            return;
-        }
+                if (nombreTarea === '') {
+                    // Mostrar alerta de error
+                    mostrarAlerta('El Nombre de la Tarea es Obligatorio', 'error', document.querySelector('.formulario legend'));
+                    return;
+                }
 
-        if(editar) {
-            tarea.nombre = nombreTarea;
-            actualizarTarea(tarea);
-        } else {
-            agregarTarea(nombreTarea);
-        }
+                if (editar) {
+                    tarea.nombre = nombreTarea;
+                    actualizarTarea(tarea);
+                } else {
+                    agregarTarea(nombreTarea);
+                }
             }
         });
 
@@ -292,14 +292,14 @@
 
             if (resultado.respuesta.tipo === 'exito') {
                 Swal.fire(
-                    resultado.respuesta.mensaje, 
+                    resultado.respuesta.mensaje,
                     resultado.respuesta.mensaje,
                     'success'
                 );
 
                 const modal = document.querySelector('.modal');
 
-                if(modal) {
+                if (modal) {
                     modal.remove();
                 }
                 // mostrarAlerta(resultado.respuesta.mensaje, resultado.respuesta.tipo, document.querySelector('.contenedor-nueva-tarea'));
@@ -332,8 +332,8 @@
     }
 
     async function eliminarTarea(tarea) {
-        
-        const { estado, id, nombre} = tarea;
+
+        const { estado, id, nombre } = tarea;
 
         const datos = new FormData();
         datos.append('id', id);
@@ -341,7 +341,7 @@
         datos.append('estado', estado);
         datos.append('proyectoId', obtenerProyecto());
 
-        try { 
+        try {
             const url = 'http://localhost:3000/api/tarea/eliminar';
             const respuesta = await fetch(url, {
                 method: 'POST',
@@ -350,12 +350,12 @@
 
             const resultado = await respuesta.json();
 
-            if(resultado.resultado) {
+            if (resultado.resultado) {
                 //Mostrar el View DOM
                 // mostrarAlerta(resultado.mensaje, resultado.tipo, document.querySelector('.contenedor-nueva-tarea'));
-                
+
                 Swal.fire('Eliminado!', resultado.mensaje, 'success');
-                
+
                 tareas = tareas.filter(tareaMemoria => tareaMemoria.id !== tarea.id);
                 mostrarTareas();
             }
